@@ -7,10 +7,12 @@ import java.lang.reflect.InvocationTargetException;
 public class DummyContainer implements Container {
     private final DummyBinder binder;
 
+    // конструктор класу, параметер binder для отримання даних з бази даних
     public DummyContainer(DummyBinder binder) {
         this.binder = binder;
     }
 
+    // основний метод класу для отримання згенерованих об'єктів
     @Override
     public <T> T getComponent(Class<T> clazz) {
         Object data = binder.getData(clazz);
@@ -23,6 +25,7 @@ public class DummyContainer implements Container {
 
     }
 
+    // метод для створення екземпляру класу з пустого конструктору
     private <T> T createInstanceOfClassT(Class<T> clazz){
         if (checkInjection(clazz)!=null)
             return checkInjection(clazz);
@@ -33,6 +36,7 @@ public class DummyContainer implements Container {
         }
     }
 
+    // метод для перевірки анотації Inject у конструкторів і повернення екземпляру класу при її наявності
     private <T> T checkInjection(Class<T> clazz) {
         for (Constructor<?> clazzConstructor:clazz.getConstructors()){
             if (clazzConstructor.isAnnotationPresent(Inject.class)) {
